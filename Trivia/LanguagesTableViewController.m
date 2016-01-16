@@ -1,19 +1,19 @@
 //
-//  LanguagesViewController.m
+//  LanguagesTableViewController.m
 //  Trivia
 //
 //  Created by KAKA on 1/13/16.
 //  Copyright © 2016 Simon Zhu. All rights reserved.
 //
 
-#import "LanguagesViewController.h"
+#import "LanguagesTableViewController.h"
 #import "QuestionsTableViewController.h"
 
-@interface LanguagesViewController ()
+@interface LanguagesTableViewController ()
 
 @end
 
-@implementation LanguagesViewController
+@implementation LanguagesTableViewController
 
 
 // Embed this in navigation controller which is automatically called when the app launches
@@ -23,17 +23,22 @@
 
 // Get rid of useless files
 
-NSMutableArray * languagesArray;
+NSMutableArray <NSString *> * languagesArray;
+
+// for searchResults
+NSArray <NSString *> *searchResults;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     
     // creating a languagesArray with Strings
     languagesArray = [[NSMutableArray alloc] init];
     [languagesArray addObject: @"C"];
     [languagesArray addObject: @"Java"];
     [languagesArray addObject: @"Ruby"];
+    [languagesArray addObject: @"Python"];
+    [languagesArray addObject: @"Javascript"];
+    
     [self setTitle: @"Programming Languages"];
     
     // Uncomment the following line to preserve selection between presentations.
@@ -57,6 +62,10 @@ NSMutableArray * languagesArray;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 //#warning Incomplete implementation, return the number of rows
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        return [searchResults count];
+    }
+    
     return [languagesArray count];
 }
 
@@ -66,6 +75,7 @@ NSMutableArray * languagesArray;
     static NSString * cellName = @"Cell";
     
     UITableViewCell *cell;
+    NSString * file;
     
 //    cell = [tableView dequeueReusableCellWithIdentifier:cellName forIndexPath:indexPath]
     
@@ -73,11 +83,44 @@ NSMutableArray * languagesArray;
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellName];
     }
     
-    cell.textLabel.text = [languagesArray objectAtIndex:indexPath.row];
+
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        file = [[searchResults objectAtIndex: indexPath.row] stringByAppendingString:@".png"];
+        cell.imageView.image = [UIImage imageNamed: file];
+        cell.textLabel.text = [searchResults objectAtIndex:indexPath.row];
+    }
+    else{
+        file = [[languagesArray objectAtIndex: indexPath.row] stringByAppendingString:@".png"];
+        cell.imageView.image = [UIImage imageNamed: file];
+        cell.textLabel.text = [languagesArray objectAtIndex:indexPath.row];
+    }
     
     return cell;
 }
 
+// For SEARCH
+//===========================================================================//
+// Method that is called everytime user types a character into the search bar
+-(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    [self filterContentForSearchText:searchString scope:[[self.searchDisplayController.searchBar scopeButtonTitles]
+    objectAtIndex:[self.searchDisplayController.searchBar selectedScopeButtonIndex]]];
+    
+    return YES;
+}
+
+// filters the results on the page based on search query
+- (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope
+{
+    NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"description contains[c] %@", searchText];
+    searchResults = [languagesArray filteredArrayUsingPredicate:resultPredicate];
+}
+//===========================================================================//
+
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    return 71;
+//}
 
 /*
 // Override to support conditional editing of the table view.
@@ -137,6 +180,16 @@ NSMutableArray * languagesArray;
     
     if ([[languagesArray objectAtIndex:indexPath.row] isEqual:@"Ruby"]) {
         languages.languagesInt = 2;
+        [languages setTitle:[languagesArray objectAtIndex:indexPath.row]];
+    }
+    
+    if ([[languagesArray objectAtIndex:indexPath.row] isEqual:@"Python"]) {
+        languages.languagesInt = 3;
+        [languages setTitle:[languagesArray objectAtIndex:indexPath.row]];
+    }
+    
+    if ([[languagesArray objectAtIndex:indexPath.row] isEqual:@"Javascript"]) {
+        languages.languagesInt = 4;
         [languages setTitle:[languagesArray objectAtIndex:indexPath.row]];
     }
     

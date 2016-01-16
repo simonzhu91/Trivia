@@ -13,6 +13,8 @@
     NSMutableArray *javaArray;
     NSMutableArray *rubyArray;
     NSMutableArray *pythonArray;
+    NSMutableArray *javascriptArray;
+    
     int languagesInt;
 }
 

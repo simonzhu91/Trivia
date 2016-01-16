@@ -16,8 +16,9 @@
 @implementation QuestionsTableViewController
 
 @synthesize languagesInt;
-
 NSMutableArray * array = nil;
+NSArray * searchArray = nil;
+NSString * file = nil;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -33,18 +34,66 @@ NSMutableArray * array = nil;
               @"C: How is a negative integer is stored?",
               @"C: What is a static variable?",
               nil];
-    javaArray = [[NSMutableArray alloc] initWithObjects:@"Java Question 1", @"Java Question 2", nil];
-    rubyArray = [[NSMutableArray alloc] initWithObjects:@"Ruby Question 1", @"Ruby Question 2", @"Ruby Question 3", nil];
+    
+    javaArray = [[NSMutableArray alloc] initWithObjects:
+                 @"Java: What is Singleton class?",
+                 @"Java: List the three steps for creating an Object for a class?",
+                 @"Java: What is a static variable?",
+                 @"Java: When parseInt() method can be used?",
+                 @"Java: What is the difference between StringBuffer and StringBuilder class?",
+                 @"Java: What is finalize() method?",
+                 @"Java: What is an Exception?",
+                 @"Java: Define Inheritance?",
+                 @"Java: What is Polymorphism?",
+                 @"Java: What is Encapsulation?",
+                 @"Java: What is an Interface?",
+                 @"Java: Why are Packages used?",
+                 nil];
+    
+    rubyArray = [[NSMutableArray alloc] initWithObjects:
+                 @"Ruby: How are these operators used: ==, ===, eql?, equal?",
+                 @"Ruby: What is the use of :var in Ruby?",
+                 @"Ruby: What is the difference between classes and modules?",
+                 @"Ruby: What are the three levels of method access control for classes and modules?",
+                 nil];
+    
     pythonArray = [[NSMutableArray alloc] initWithObjects:@"Python Question 1", @"Python Question 2", @"Python Question 3", nil];
     
-    if(languagesInt == 0)
+    javascriptArray = [[NSMutableArray alloc] initWithObjects:
+        @"Javascript: What is prototype?",
+        @"Javascript: What are closures and how are they used?",
+        @"Javascript: What is the difference between == and === ?",
+        @"Javascript: What datatypes are supported in Javascript?",
+        @"Javascript: What is the difference between a null value and an undefined value?",
+        @"Javascript: What is NaN?",
+        @"Javascript: Explain the concept of unobtrusive Javascript?",
+        @"Javascript: Describe an instance of prototypal inheritance in JavaScript?",
+        @"Javascript: Explain the meaning of  the keyword ‘this’ in JavaScript functions",
+        @"Javascript: What does a timer do and how would you implement one?",
+        @"Javascript: Is there automatic type conversion in JavaScript?",
+        @"Javascript: Which conditional statements will JavaScript support?",
+        nil];
+    
+    if(languagesInt == 0){
         array = cArray;
-    else if(languagesInt == 1)
+        file = @"C.png";
+    }
+    else if(languagesInt == 1){
         array = javaArray;
-    else if(languagesInt == 2)
+        file = @"Java.png";
+    }
+    else if(languagesInt == 2){
         array = rubyArray;
-    else if(languagesInt == 3)
+        file = @"Ruby.png";
+    }
+    else if(languagesInt == 3){
         array = pythonArray;
+        file = @"Python.png";
+    }
+    else if(languagesInt == 4){
+        array = javascriptArray;
+        file = @"Javascript.png";
+    }
     else
         array = nil;
 }
@@ -64,6 +113,10 @@ NSMutableArray * array = nil;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 //#warning Incomplete implementation, return the number of rows
     
+    if(tableView == self.searchDisplayController.searchResultsTableView){
+        return [searchArray count];
+    }
+    
     // returns the number of rows depending on the language selected
     return [array count];
 }
@@ -74,17 +127,25 @@ NSMutableArray * array = nil;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString * cellName = @"Cell";
-    
     UITableViewCell *cell;
     
     //    cell = [tableView dequeueReusableCellWithIdentifier:cellName forIndexPath:indexPath]
+    
     
     if(cell == nil){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellName];
     }
     
-    cell.textLabel.text = [array objectAtIndex:indexPath.row];
-    cell.textLabel.font = [UIFont systemFontOfSize:14];
+    if(tableView == self.searchDisplayController.searchResultsTableView){
+        cell.imageView.image = [UIImage imageNamed: file];
+        cell.textLabel.text = [searchArray objectAtIndex:indexPath.row];
+        cell.textLabel.font = [UIFont systemFontOfSize:14];
+    }
+    else{
+        cell.imageView.image = [UIImage imageNamed: file];
+        cell.textLabel.text = [array objectAtIndex:indexPath.row];
+        cell.textLabel.font = [UIFont systemFontOfSize:14];
+    }
     
     // trick like in Storyboard, when you set the numberOfLines to 0, it will scale to how many lines it needs to display the text
     cell.textLabel.numberOfLines = 0;
@@ -129,6 +190,25 @@ NSMutableArray * array = nil;
 //        [languages setTitle:[languagesArray objectAtIndex:indexPath.row]];
 //    }
 }
+
+
+// For SEARCH
+//===========================================================================//
+// Method that is called everytime user types a character into the search bar
+-(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    [self filterContentForSearchText:searchString scope:[[self.searchDisplayController.searchBar scopeButtonTitles]
+                                                         objectAtIndex:[self.searchDisplayController.searchBar selectedScopeButtonIndex]]];
+    return YES;
+}
+
+// filters the results on the page based on search query
+- (void)filterContentForSearchText:(NSString *)searchText scope:(NSString *)scope
+{
+    NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"description contains[c] %@", searchText];
+    searchArray = [array filteredArrayUsingPredicate:resultPredicate];
+}
+//===========================================================================//
 
 /*
 // Override to support conditional editing of the table view.

@@ -1,5 +1,5 @@
 //
-//  LanguagesViewController.h
+//  LanguagesTableViewController.h
 //  Trivia
 //
 //  Created by KAKA on 1/13/16.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LanguagesViewController : UITableViewController
+@interface LanguagesTableViewController : UITableViewController
 
 @end

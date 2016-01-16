@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "LanguagesViewController.h"
+#import "LanguagesTableViewController.h"
 
 @interface AppDelegate ()
 
@@ -19,20 +19,20 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-//    [self.window setLanguagesViewController:self.navController];
-//    self.window.LanguagesViewController = self.navController;
+//    [self.window setLanguagesTableViewController:self.navController];
+//    self.window.LanguagesTableViewController = self.navController;
     
     // Override point for customization after application launch.
     
     
-    // customizes renders LanguagesViewController
+    // customizes renders LanguagesTableViewController
 //    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
 //    
-//    LanguagesViewController *yourController = (LanguagesViewController *)[mainStoryboard instantiateViewControllerWithIdentifier:@"LanguagesViewController"];
+//    LanguagesTableViewController *yourController = (LanguagesTableViewController *)[mainStoryboard instantiateViewControllerWithIdentifier:@"LanguagesTableViewController"];
 //    
-//    self.window.LanguagesViewController = yourController;
+//    self.window.LanguagesTableViewController = yourController;
 //    
-//    UINavigationController * navController = [[UINavigationController alloc] initWithLanguagesViewController: yourController];
+//    UINavigationController * navController = [[UINavigationController alloc] initWithLanguagesTableViewController: yourController];
     
     
     
